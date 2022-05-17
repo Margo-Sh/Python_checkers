@@ -7,42 +7,23 @@ import gl_var
 # b_c b_k -- black checkers and kings
 
 def rules():
-    print("Welcome to CHECKERS! Here is how you play:")
-    print("111 000 -- unoccupied positions on the board \n",
-          "w_c w_k -- white checkers and kings \n", "b_c b_k -- black checkers and kings")
-    print("Input the choosen piece's row and column: 3 5")
-    print("The rows and columns are numbered from zero.")
-    print("Once a player selects a piece, they have to move it.")
-    print("You will continue inputting coordinates until you select your piece.")
-    print("When moving the piece, you must input the destination position just after the taken piece.")
-    print("A taken piece is immediately removed from the board.")
-    print("You will continue inputting coordinates until your move is correct.")
-    print("The game stops when one player has no pieces left.")
+    for text in gl_var.rules:
+        print(text)
 
 
 def simple_display():
-    for i in range(0, 8):
-        # for j in range(0, 8):
-        print(gl_var.board[i])
+    for row in gl_var.board:
+        print(row)
     print("\n")
-
-
-simple_display()
 
 
 def set_board():
     for i in range(0, 2):
-        for j in range(0, 8):
-            gl_var.board[i][j] = ("w_c" if (i + j) % 2 == 0 else "000")
-
-    for i in range(2, 6):
-        for j in range(0, 8):
-            gl_var.board[i][j] = ("111" if (i + j) % 2 == 0 else "000")
-
+        for j in range(0, 4):
+            game_logic.change_board(i, i + 2*j, "w_c")
     for i in range(6, 8):
-        for j in range(0, 8):
-            gl_var.board[i][j] = ("b_c" if (i + j) % 2 == 0 else "000")
-
+        for j in range(0, 4):
+            game_logic.change_board(i, (i - 6) + 2*j, "b_c")
 
 
 rules()
@@ -68,16 +49,15 @@ while True:
 
         game_logic.remove_pieces()
 
-        gl_var.figure[0] = x_new
-        gl_var.figure[1] = y_new
+        # gl_var.figure = [x_new, y_new]
 
         simple_display()
 
         if game_logic.cannot_eat():
             gl_var.move_continuation = False
 
-    gl_var.turn *= (-1)
-    gl_var.move_continuation = True
     if game_logic.check_victory():
         break
 
+    gl_var.move_continuation = True
+    gl_var.turn *= (-1)
